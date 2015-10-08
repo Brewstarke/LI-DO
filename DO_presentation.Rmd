@@ -1,0 +1,211 @@
+---
+title: "Dissolved Oxygen Observations"
+subtitle: "at stations across Bluepoints Preserve"
+author: "Adam Starke"
+date: "September 18, 2015"
+output: html_document
+theme: flatly
+highlight: pygments
+
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(shiny)
+library(shinydashboard)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(DT)
+library(ggthemes)
+library(lubridate)
+library(shiny)
+library(xlsx)
+library(ggvis)
+library(dygraphs)
+library(xts)
+library(magrittr)
+library(ggvis)
+library(dataRetrieval)
+library(leaflet)
+library(DT)
+library(RColorBrewer)
+library(rgdal)
+library(sp)
+library(maptools)
+library(metricsgraphics)
+
+load('.RData')
+
+
+```
+
+
+```{r DataLoad, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+
+## Start Pulling in USGS Site data	
+# Programatic attempt- using a list of sites to add all subsequent processes
+sites <- c('404327073072701', '404149073051301', '404153073030701')
+# Site codes
+site1 <- '404327073072701'
+site2 <- '404149073051301'
+site3 <- '404153073030701'
+# Parameter code
+
+DOparameter <- "00300"
+
+# 
+# site1_Sitedata <- readNWISsite(site1)
+# site2_Sitedata <- readNWISdata(site2)
+# site3_Sitedata <- readNWISdata(site3)
+# for (i in sites){
+# 	tmp <- readNWISuv(i, "00300", "","")
+# 	tmpInfo <- attr(tmp, "siteInfo")
+# 	tmpName <- as.character(tmpInfo$station_nm)
+# 	assign(tmp, tmpName)
+# 	return(tmp)
+# 	}
+
+site1_Rawdata <- readNWISuv(site1, DOparameter, "", "")
+site2_Rawdata <- readNWISuv(site2, DOparameter, "", "")
+site3_Rawdata <- readNWISuv(site3, DOparameter, "", "")
+
+# Add spatial info and query time (to mark the time of the generation of the data)
+
+site1_loc <- attr(site1_Rawdata, "siteInfo")
+site2_loc <- attr(site2_Rawdata, "siteInfo")
+site3_loc <- attr(site3_Rawdata, "siteInfo")
+
+siteLocations <- bind_rows(site1_loc, site2_loc, site3_loc) %>% 
+	select(station_nm, site_no, starts_with("dec")) %>% 
+	rename(Lat = dec_lat_va, Lon = dec_lon_va)
+
+bluepoints <- readOGR(".","BluepointsProperty", encoding = "ESRI Shapefile")
+
+bluepoints <- spTransform(bluepoints, CRS("+init=epsg:4326"))
+
+```
+## Study Area
+```{r Maps, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=5}
+
+DO_map <- leaflet(siteLocations) %>% 
+	addTiles('http://a{s}.acetate.geoiq.com/tiles/terrain/{z}/{x}/{y}.png', 
+					 attribution = 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>') %>%
+	addMarkers(label = ~station_nm, labelOptions = c(noHide = TRUE, direction = 'right', offset = c(-10, 20))) %>%
+	addPolygons(data = bluepoints, fill = FALSE, weight = 3) 
+DO_map
+
+```
+
+## Data is preliminary
+### Data has been corrected for Salinity and Fouling 
+
+
+Each of the three stations we've established consist of 2 sets of Dissolved Oxygen loggers "Upper" loggers are set at 0.5 meters from the sediment and "Lower" loggers are set at 0.1 meters from the sediments.
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3}
+
+
+DO1 <- site1_Rawdata %>% 
+	rename(DO_0.5m = X_0.5m.above.seabed_00300_00011) %>% 
+	rename(DO_0.1m = X_0.1m.above.seabed_00300_00011) %>% 
+	select(dateTime, starts_with("DO")) %>% 
+	xts(order.by = .$dateTime) %>% 
+	dygraph(., main = "Station 1- Mouth of Connetquot River", group = "DO-stations") %>% 
+	dyAxis("y", valueRange = c(-1, 11)) %>% 
+	# dyRangeSelector(retainDateWindow = FALSE) %>% 
+	dyOptions(useDataTimezone = FALSE, colors = RColorBrewer::brewer.pal(12, "Paired")[1:2])
+
+
+DO2 <- site2_Rawdata %>% 
+	rename(DO_0.5m = X_0.5m.above.seabed_00300_00011) %>% 
+	rename(DO_0.1m = X_0.1m.above.seabed_00300_00011) %>% 
+	select(dateTime, starts_with("DO")) %>% 
+	xts(order.by = .$dateTime) %>% 
+	dygraph(., main = "Station 2- Central Bluepoints Property", group = "DO-stations") %>% 
+	dyAxis("y", label = "DO mg/L", valueRange = c(-1, 11)) %>% 
+	# dyRangeSelector(retainDateWindow = FALSE) %>% 
+	dyOptions(useDataTimezone = FALSE, colors = RColorBrewer::brewer.pal(12, "Paired")[3:4])  
+	
+
+DO3 <- site3_Rawdata %>% 
+	rename(DO_0.5m = X_0.5m.above.seabed_00300_00011) %>% 
+	rename(DO_0.1m = X_0.1m.above.seabed_00300_00011) %>% 
+	select(dateTime, starts_with("DO")) %>%
+	xts(order.by = .$dateTime) %>% 
+	dygraph(., main = "Station 3- Along Eastern Bluepoints Property Line", group = "DO-stations") %>% 
+	dyAxis("y", valueRange = c(-1, 11)) %>% 
+	# dyRangeSelector(retainDateWindow = FALSE) %>% 
+	dyOptions(useDataTimezone = FALSE, colors = RColorBrewer::brewer.pal(12, "Paired")[9:10]) 
+	
+
+
+DO1
+DO2
+DO3
+
+
+```
+
+  
+### Putting this in context with the EPA Oxygen Criteria:
+
+
+Taken from: http://water.epa.gov/scitech/swguidance/standards/criteria/aqlife/dissolved/dofacts.cfm  
+
+> What are the criteria limits?  
+Dissolved oxygen criteria apply to both continuous and cyclic low DO conditions. If the DO conditions are always **_above_ the chronic criterion for growth (4.8 mg/L)**, the aquatic life at that location should not be harmed. If the DO conditions at a site are **_below_ the juvenile/adult survival criterion (2.3 mg/L)**, there is not enough DO to protect aquatic life. When persistent DO conditions are between these two values, further evaluation of duration and intensity of low DO is needed to determine whether the level of oxygen can support a healthy aquatic life community.  
+The approach for episodic or cyclic low DO conditions requires that the DO be directly measured over a daily cycle or that the daily DO cycle be estimated. The cyclic pattern is then compared to allowable levels to determine suitability of DO conditions for the juvenile/adult survival, larval growth, and larval recruitment endpoints. 
+
+Below are the same plots as above with these criteria higlighted. 
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3}
+
+
+DO1 %>% dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>% 
+	dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
+
+DO2 %>% dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>% 
+	dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
+
+DO3 %>% dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>% 
+	dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
+
+
+
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3}
+
+rankDOdata <- site2_Rawdata %>% 
+	select(dateTime, X_0.5m.above.seabed_00300_00011, X_0.1m.above.seabed_00300_00011) %>% 
+	mutate(CumDist_0.5m = cume_dist(X_0.5m.above.seabed_00300_00011), CumDist_0.1m = cume_dist(X_0.1m.above.seabed_00300_00011)) 
+
+# 
+# rankPlot <- rankDOdata%>% 
+# 	ggvis(x = ~CumDist_0.5m, y = ~X_0.5m.above.seabed_00300_00011) %>% 
+# 	layer_lines()
+# rankPlot
+
+CumDO <- rankDOdata %>% 
+	mjs_plot(x = CumDist_0.5m, y = X_0.5m.above.seabed_00300_00011) %>% 
+	mjs_line() %>%
+	mjs_add_baseline(4.8, "Above this line, aquatic life unharmed") %>% 
+	mjs_add_baseline(2.3, "Not Enough DO to protect life") %>% 
+	mjs_axis_x(min_x = -0.10)
+CumDO
+# 
+# 
+# stocks <- data.frame(
+#   time = as.Date('2009-01-01') + 0:9,
+#   X = rnorm(10, 0, 1),
+#   Y = rnorm(10, 0, 2),
+#   Z = rnorm(10, 0, 4)
+# )
+# 
+# stocksgather <- gather(stocks, stock, price, -time)
+
+```
+
+
+
