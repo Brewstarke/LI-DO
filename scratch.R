@@ -11,12 +11,12 @@ cleanDOdata <- alldata %>%
 	select(Date.Time, starts_with("DO")) %>% 
 	filter(complete.cases(.))
 
-rankDOdata <- cleanDOdata %>% 
-	select(Date.Time, DO.1.lower) %>% 
-	separate(Date.Time, c("Date", "Time"), sep = " ") %>% 
-	mutate(cumDist = cume_dist(DO.1.lower)) %>% 
-	ggvis(~cumDist, ~DO.1.lower) %>% 
-	layer_lines(stroke = ~Date.Time)
+rankDOdata <- DOdata %>% 
+	select(dateTime, DO_0.5m) %>% 
+	separate(dateTime, c("Date", "Time"), sep = " ", remove = FALSE) %>% 
+	mutate(cumDist = cume_dist(DO_0.5m)) %>% 
+	ggvis(~cumDist, ~DO_0.5m) %>% 
+	layer_lines(stroke = ~dateTime)
 
 rankDOdata
 

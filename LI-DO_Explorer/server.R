@@ -128,20 +128,6 @@ shinyServer(function(input, output) {
       dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
     
     
-    # 
-    # 
-    # DO1 <- site1_Rawdata %>% 
-    # 	rename(DO_0.5m = X_0.5m.above.seabed_00300_00011) %>% 
-    # 	rename(DO_0.1m = X_0.1m.above.seabed_00300_00011) %>% 
-    # 	select(dateTime, starts_with("DO")) %>% 
-    # 	xts(order.by = .$dateTime) %>% 
-    # 	dygraph(., main = "Station 1- Mouth of Connetquot River", group = "DO-stations") %>% 
-    # 	dyAxis("y", valueRange = c(-1, 11)) %>% 
-    # 	dySeries('DO_0.5m', 'DO 0.5m') %>% 
-    # 	dySeries('DO_0.1m', 'DO 0.1m') %>%
-    # 	dyRangeSelector(retainDateWindow = FALSE) %>% 
-    # 	dyOptions(useDataTimezone = FALSE, colors = RColorBrewer::brewer.pal(12, "Paired")[1:2])
-    # 
   })
   
 })

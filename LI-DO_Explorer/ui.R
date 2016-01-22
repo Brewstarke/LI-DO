@@ -30,24 +30,21 @@ library(htmltools)
 
 
 # Define UI for application that draws a histogram
-shinyUI(navbarPage("Long Island DO Monitoring", 
+shinyUI(navbarPage("Long Island DO Monitoring", theme = "www/bootstrap.css",
                    tabPanel("Monitoring Stations"),
                     fluidRow(
                         column(12,
                                 leafletOutput("siteMap"))
                     ),
                    fluidRow(
-                     column(8,
-                            h3("Plots and plots..."),
-                            dygraphOutput("tsPlots")
+                     column(10,
+                            h3("Time Series Plot"),
+                            dygraphOutput("tsPlots", width = '100%', height = 400)
                                    ),
-                     column(3,
+                     column(2,
                             h4("descriptions or sliders...")),
                      column(12, 
                             verbatimTextOutput('maptext'))
                      
-                     ),
-                  tabPanel("Site Comparisons"),
-                   
-                  tabPanel("Quanitying Impacts")
+                     )
 ))
