@@ -15,26 +15,23 @@ library(shinydashboard)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library(DT)
 library(ggthemes)
 library(lubridate)
 library(shiny)
-library(xlsx)
 library(ggvis)
 library(dygraphs)
 library(xts)
 library(magrittr)
-library(ggvis)
 library(dataRetrieval)
 library(leaflet)
-library(DT)
 library(RColorBrewer)
 library(rgdal)
 library(sp)
 library(maptools)
 library(metricsgraphics)
+library(htmltools)
 
-load('.RData')
+# load('.RData')
 
 
 ```
@@ -79,9 +76,13 @@ siteNames <- c('Hemp',
 
 names(siteIDs) <- siteNames
 
+
+DOparameter <- "00300"
+
+
 RawDO <- readNWISuv(siteIDs, DOparameter, "", "")
 
-# 
+# Old Code ---- 
 # <- '405004073391001'
 # OBH <- '405240073314901'
 # CSH <- '405232073281801'
@@ -112,7 +113,7 @@ RawDO <- readNWISuv(siteIDs, DOparameter, "", "")
 # 
 # # Parameter code
 
-DOparameter <- "00300"
+
 
 # 
 # 
@@ -127,6 +128,8 @@ DOparameter <- "00300"
 # site2_loc <- attr(site2_Rawdata, "siteInfo")
 # site3_loc <- attr(site3_Rawdata, "siteInfo")
 # northport_loc <- attr(northport_Rawdata, "siteInfo")
+
+# Location data ----
 
 siteInfo <- attr(RawDO, "siteInfo")
 
@@ -149,7 +152,7 @@ bluepoints <- spTransform(bluepoints, CRS("+init=epsg:4326"))
 
 DO_map <- leaflet(siteLocations) %>% 
 	addProviderTiles("CartoDB.Positron") %>%
-	addMarkers(label = ~station_nm, labelOptions = c(noHide = TRUE, direction = 'right', offset = c(-10, 20))) %>%
+	addMarkers(popup = ~htmlEscape(station_nm), options = popupOptions(zoomAnimation = TRUE, closeOnClick = FALSE)) %>% 
 	addPolygons(data = bluepoints, fill = FALSE, weight = 3) 
 DO_map
 
@@ -170,6 +173,8 @@ Each of the three stations we've established consist of 2 sets of Dissolved Oxyg
 # 
 # # Function for dyplots
 # 
+
+
 DOdy_singlemonitor <- function(data){
 	data %>%
 	rename(DO_0.5m = X_00300_00011) %>%
@@ -183,7 +188,7 @@ DOdy_singlemonitor <- function(data){
 }
 
 
-RawDO %>% filter(site_no == siteIDs[2]) %>%
+RawDO %>% filter(site_no == siteIDs[3:5]) %>%
 	DOdy_singlemonitor(.)%>% dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>%
 	dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
 

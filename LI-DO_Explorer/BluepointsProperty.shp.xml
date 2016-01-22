@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="en">
+	<idinfo>
+		<citation>
+			<citeinfo>
+				<origin>The Nature Conservancy</origin>
+				<pubdate>REQUIRED: The date when the data set is published or otherwise made available for release.</pubdate>
+				<title Sync="TRUE">Bluepoints_surveyline</title>
+				<geoform Sync="TRUE">vector digital data</geoform>
+				<onlink Sync="TRUE">\\GIS1\LI\NACsites\AOB\Bluepoints\Bluepoints_surveyline.shp</onlink>
+				<ftname Sync="TRUE">Bluepoints_surveyline</ftname></citeinfo>
+		</citation>
+		<descript>
+			<abstract>Polygon showing the approximate boundary of TNC's underwater holding in the Great South Bay, formerly known as Bluepoints</abstract>
+			<purpose>To create a useable boundary of TNC's underwater holding in the Great South Bay</purpose>
+			<langdata Sync="TRUE">en</langdata></descript>
+		<timeperd>
+			<timeinfo>
+				<sngdate>
+					<caldate>REQUIRED: The year (and optionally month, or month and day) for which the data set corresponds to the ground.</caldate>
+				</sngdate>
+			</timeinfo>
+			<current>REQUIRED: The basis on which the time period of content information is determined.</current>
+		</timeperd>
+		<status>
+			<progress>Complete</progress>
+			<update>As needed</update>
+		</status>
+		<spdom>
+			<bounding>
+				<westbc Sync="TRUE">-73.148902</westbc>
+				<eastbc Sync="TRUE">-73.049925</eastbc>
+				<northbc Sync="TRUE">40.729592</northbc>
+				<southbc Sync="TRUE">40.647755</southbc>
+			</bounding>
+			<lboundng><leftbc Sync="TRUE">656506.490798</leftbc><rightbc Sync="TRUE">664681.477016</rightbc><bottombc Sync="TRUE">4501479.423765</bottombc><topbc Sync="TRUE">4510391.856811</topbc></lboundng></spdom>
+		<keywords>
+			<theme>
+				<themekt>REQUIRED: Reference to a formally registered thesaurus or a similar authoritative source of theme keywords.</themekt>
+				<themekey>REQUIRED: Common-use word or phrase used to describe the subject of the data set.</themekey>
+			</theme>
+		</keywords>
+		<accconst>REQUIRED: Restrictions and legal prerequisites for accessing the data set.</accconst>
+		<useconst>The Nature Conservancy (TNC) created this data set from the manipulation, analysis, and/or synthesis of publicly available data sources. TNC allows copying and distribution of this data set. Commercial use of this data set is prohibited. This data set must be cited on all electronic and hard copy products using the language of the Data Set Credit. </useconst>
+		<ptcontac>
+			<cntinfo>
+				<cntperp>
+					<cntper>Barnaby Friedman</cntper>
+					<cntorg>The Nature Conservancy</cntorg>
+				</cntperp>
+				<cntpos>Long Island GIS Manager</cntpos>
+				<cntaddr>
+					<addrtype>mailing and physical address</addrtype>
+					<address>PO Box 5125</address>
+					<address>142 Route 114</address>
+					<city>East Hampton</city>
+					<state>NY</state>
+					<postal>11937</postal>
+					<country>USA</country>
+				</cntaddr>
+				<cntvoice>6313297689</cntvoice>
+				<cntfax>6313290215</cntfax>
+				<cntemail>bfriedman@tnc.org</cntemail>
+			</cntinfo>
+		</ptcontac>
+		<native Sync="TRUE">Microsoft Windows 2000 Version 5.0 (Build 2195) Service Pack 2; ESRI ArcCatalog 8.3.0.800</native>
+		<natvform Sync="TRUE">Shapefile</natvform></idinfo>
+	<dataqual>
+		<complete>The Nature Conservancy  makes no warranty, expressed or implied, as to the use or appropriateness of use of the enclosed data, nor are there warranties of merchantability or fitness for a particular purpose or use. No representation is made as to the currency, accuracy or completeness of the information or of the data sources on which it is based. The Nature Conservancy shall not be liable for any lost profits or consequential damages, or claims against the user by third parties.</complete>
+		<lineage>
+			<srcinfo>
+				<srccontr>Layer created from original Bluepoints survey scanned in and rough registered then on screen hand digitized by The Nature Conservancy</srccontr>
+			</srcinfo>
+			<procstep>
+				<procdesc Sync="TRUE">Metadata imported.</procdesc>
+				<srcused Sync="TRUE">C:\DOCUME~1\BFRIED~1\LOCALS~1\Temp\xml53.tmp</srcused>
+				<time Sync="TRUE">14521000</time>
+			</procstep>
+			<procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">C:\DOCUME~1\BFRIED~1\LOCALS~1\Temp\xml150.tmp</srcused><date Sync="TRUE">20031015</date><time Sync="TRUE">10410000</time></procstep></lineage>
+	</dataqual>
+	<spdoinfo>
+		<direct Sync="TRUE">Vector</direct>
+		<ptvctinf>
+			<sdtsterm Name="Bluepoints_surveyline">
+				<sdtstype Sync="TRUE">G-polygon</sdtstype>
+				<ptvctcnt Sync="TRUE">1</ptvctcnt>
+			</sdtsterm>
+			<esriterm Name="Bluepoints_surveyline"><efeatyp Sync="TRUE">Simple</efeatyp><efeageom Sync="TRUE">Polygon</efeageom><esritopo Sync="TRUE">FALSE</esritopo><efeacnt Sync="TRUE">1</efeacnt><spindex Sync="TRUE">TRUE</spindex><linrefer Sync="TRUE">FALSE</linrefer></esriterm></ptvctinf>
+	</spdoinfo>
+	<spref>
+		<horizsys>
+			<planar>
+				<planci>
+					<plance Sync="TRUE">coordinate pair</plance>
+					<coordrep>
+						<absres Sync="TRUE">0.000016</absres>
+						<ordres Sync="TRUE">0.000016</ordres>
+					</coordrep>
+					<plandu Sync="TRUE">meters</plandu>
+				</planci>
+				<gridsys><gridsysn Sync="TRUE">Universal Transverse Mercator</gridsysn><utm><utmzone Sync="TRUE">18</utmzone><transmer><sfctrmer Sync="TRUE">0.999600</sfctrmer><longcm Sync="TRUE">-75.000000</longcm><latprjo Sync="TRUE">0.000000</latprjo><feast Sync="TRUE">500000.000000</feast><fnorth Sync="TRUE">0.000000</fnorth></transmer></utm></gridsys></planar>
+			<geodetic>
+				<horizdn Sync="TRUE">North American Datum of 1983</horizdn>
+				<ellips Sync="TRUE">Geodetic Reference System 80</ellips>
+				<semiaxis Sync="TRUE">6378137.000000</semiaxis>
+				<denflat Sync="TRUE">298.257222</denflat>
+			</geodetic>
+			<cordsysn><geogcsn Sync="TRUE">GCS_North_American_1983</geogcsn><projcsn Sync="TRUE">NAD_1983_UTM_Zone_18N</projcsn></cordsysn></horizsys>
+	</spref>
+	<eainfo>
+		<detailed Name="Bluepoints_surveyline">
+			<enttyp>
+				<enttypl Sync="TRUE">Bluepoints_surveyline</enttypl>
+				<enttypt Sync="TRUE">Feature Class</enttypt><enttypc Sync="TRUE">1</enttypc></enttyp>
+			<attr>
+				<attrlabl Sync="TRUE">FID</attrlabl>
+				<attrdef Sync="TRUE">Internal feature number.</attrdef>
+				<attrdefs Sync="TRUE">ESRI</attrdefs>
+				<attrdomv>
+					<udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom>
+				</attrdomv>
+				<attalias Sync="TRUE">FID</attalias><attrtype Sync="TRUE">OID</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr>
+			<attr>
+				<attrlabl Sync="TRUE">Shape</attrlabl>
+				<attrdef Sync="TRUE">Feature geometry.</attrdef>
+				<attrdefs Sync="TRUE">ESRI</attrdefs>
+				<attrdomv>
+					<udom Sync="TRUE">Coordinates defining the features.</udom>
+				</attrdomv>
+				<attalias Sync="TRUE">Shape</attalias><attrtype Sync="TRUE">Geometry</attrtype><attwidth Sync="TRUE">0</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr>
+			<attr>
+				<attrlabl Sync="TRUE">Id</attrlabl>
+				<attalias Sync="TRUE">Id</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">6</attwidth></attr>
+			<attr>
+				<attrlabl Sync="TRUE">Area</attrlabl>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">Perimeter</attrlabl>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">Acres</attrlabl>
+			</attr>
+		</detailed>
+	</eainfo>
+	<distinfo>
+		<resdesc Sync="TRUE">Downloadable Data</resdesc>
+		<distliab>The Nature Conservancy  makes no warranty, expressed or implied, as to the use or appropriateness of use of the enclosed data, nor are there warranties of merchantability or fitness for a particular purpose or use. No representation is made as to the currency, accuracy or completeness of the information or of the data sources on which it is based. The Nature Conservancy shall not be liable for any lost profits or consequential damages, or claims against the user by third parties.</distliab>
+		<stdorder>
+			<digform>
+				<digtinfo>
+					<transize Sync="TRUE">0.015</transize>
+					<dssize Sync="TRUE">0.015</dssize></digtinfo>
+			</digform>
+		</stdorder>
+	</distinfo>
+	<metainfo>
+		<metd Sync="TRUE">20031015</metd>
+		<metrd>2002</metrd>
+		<metc>
+			<cntinfo>
+				<cntorgp>
+					<cntorg>Southfork/Shelter Island Chapter, The Nature Conservancy</cntorg>
+					<cntper>Barnaby Friedman</cntper>
+				</cntorgp>
+				<cntpos>Long Island GIS Manager</cntpos>
+				<cntaddr>
+					<addrtype>PO Box 5125</addrtype>
+					<address>142 Route 114</address>
+					<city>East Hampton</city>
+					<state>NY</state>
+					<postal>11937</postal>
+				</cntaddr>
+				<cntvoice>6313297689</cntvoice>
+				<cntfax>6313290215</cntfax>
+				<cntemail>bfriedman@tnc.org</cntemail>
+			</cntinfo>
+		</metc>
+		<metstdn Sync="TRUE">FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+		<metstdv Sync="TRUE">FGDC-STD-001-1998</metstdv>
+		<mettc Sync="TRUE">local time</mettc>
+		<metuc>The Nature Conservancy (TNC) created this data set from the manipulation, analysis, and/or synthesis of publicly available data sources. TNC allows copying and distribution of this data set. Commercial use of this data set is prohibited. This data set must be cited on all electronic and hard copy products using the language of the Data Set Credit. </metuc>
+		<langmeta Sync="TRUE">en</langmeta><metextns><onlink Sync="TRUE">http://www.esri.com/metadata/esriprof80.html</onlink><metprof Sync="TRUE">ESRI Metadata Profile</metprof></metextns></metainfo>
+	<Esri><CreaDate>20140401</CreaDate><CreaTime>07512500</CreaTime><SyncOnce>FALSE</SyncOnce><SyncDate>20031015</SyncDate><SyncTime>10410200</SyncTime><ModDate>20031015</ModDate><ModTime>10412700</ModTime><ArcGISFormat>1.0</ArcGISFormat><ArcGISstyle>FGDC CSDGM Metadata</ArcGISstyle><DataProperties><itemProps><itemLocation><linkage Sync="TRUE">file://\\NY204-ASTARKE\Users\astarke\Documents\GIS\GSB_GIS_Projects\BluepointsProperty</linkage><protocol Sync="TRUE">Local Area Network</protocol></itemLocation></itemProps><copyHistory><copy source="C:\Users\astarke\Documents\GIS\MapboxTileMill_shapefiles\BluepointsProperty" dest="\\NY204-ASTARKE\Users\astarke\Documents\GIS\GSB_GIS_Projects\BluepointsProperty" date="20141019" time="20065700"></copy></copyHistory></DataProperties></Esri><dataIdInfo><envirDesc Sync="TRUE">Microsoft Windows 2000 Version 5.0 (Build 2195) Service Pack 2; ESRI ArcCatalog 8.3.0.800</envirDesc><dataLang><languageCode Sync="TRUE" value="en"></languageCode></dataLang><idCitation><resTitle Sync="TRUE">Bluepoints_surveyline</resTitle><presForm><PresFormCd Sync="TRUE" value="005"></PresFormCd></presForm></idCitation><spatRpType><SpatRepTypCd Sync="TRUE" value="001"></SpatRepTypCd></spatRpType><dataExt><geoEle><GeoBndBox esriExtentType="native"><westBL Sync="TRUE">656506.490798</westBL><eastBL Sync="TRUE">664681.477016</eastBL><northBL Sync="TRUE">4510391.856811</northBL><southBL Sync="TRUE">4501479.423765</southBL><exTypeCode Sync="TRUE">1</exTypeCode></GeoBndBox></geoEle></dataExt><geoBox esriExtentType="decdegrees"><westBL Sync="TRUE">-73.148902</westBL><eastBL Sync="TRUE">-73.049925</eastBL><northBL Sync="TRUE">40.729592</northBL><southBL Sync="TRUE">40.647755</southBL><exTypeCode Sync="TRUE">1</exTypeCode></geoBox></dataIdInfo><mdLang><languageCode Sync="TRUE" value="en"></languageCode></mdLang><mdStanName Sync="TRUE">ISO 19115 Geographic Information - Metadata</mdStanName><mdStanVer Sync="TRUE">DIS_ESRI1.0</mdStanVer><mdChar><CharSetCd Sync="TRUE" value="004"></CharSetCd></mdChar><mdHrLv><ScopeCd Sync="TRUE" value="005"></ScopeCd></mdHrLv><mdHrLvName Sync="TRUE">dataset</mdHrLvName><distInfo><distributor><distorTran><onLineSrc><orDesc Sync="TRUE">002</orDesc><linkage Sync="TRUE">file://\\GIS1\LI\NACsites\AOB\Bluepoints\Bluepoints_surveyline.shp</linkage><protocol Sync="TRUE">Local Area Network</protocol></onLineSrc><transSize Sync="TRUE">0.015</transSize></distorTran><distorFormat><formatName Sync="TRUE">Shapefile</formatName></distorFormat></distributor></distInfo><refSysInfo><RefSystem><refSysID><identCode Sync="TRUE">NAD_1983_UTM_Zone_18N</identCode></refSysID></RefSystem></refSysInfo><spatRepInfo><VectSpatRep><topLvl><TopoLevCd Sync="TRUE" value="001"></TopoLevCd></topLvl><geometObjs Name="Bluepoints_surveyline"><geoObjTyp><GeoObjTypCd Sync="TRUE" value="001"></GeoObjTypCd></geoObjTyp><geoObjCnt Sync="TRUE">1</geoObjCnt></geometObjs></VectSpatRep></spatRepInfo><mdDateSt Sync="TRUE">20031015</mdDateSt></metadata>
