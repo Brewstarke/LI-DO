@@ -1,3 +1,12 @@
 .Rproj.user
 .Rhistory
 .RData
+Rplot.png
+Rplot01.png
+Rplot02.png
+ggmapTemp.png
+.gitignore
+DO_Monitoring_report.docx
+DO_Monitoring_report_files/
+DO_Monitoring_report.Rmd
+
