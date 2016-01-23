@@ -42,7 +42,8 @@ shinyUI(navbarPage("Long Island DO Monitoring", theme = "www/bootstrap.css",
                             dygraphOutput("tsPlots", width = '100%', height = 400)
                                    ),
                      column(2,
-                            h4("descriptions or sliders...")),
+                            h4("Cumulative Plot"),
+                            renderPlot("cumulativePlot")),
                      column(12, 
                             verbatimTextOutput('maptext'))
                      
