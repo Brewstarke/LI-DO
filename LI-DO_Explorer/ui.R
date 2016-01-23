@@ -37,13 +37,13 @@ shinyUI(navbarPage("Long Island DO Monitoring", theme = "www/bootstrap.css",
                                 leafletOutput("siteMap"))
                     ),
                    fluidRow(
-                     column(10,
+                     column(6,
                             h3("Time Series Plot"),
                             dygraphOutput("tsPlots", width = '100%', height = 400)
                                    ),
-                     column(2,
-                            h4("Cumulative Plot"),
-                            renderPlot("cumulativePlot")),
+                     column(6,
+                            h4("Raster Plot"),
+                            renderPlot("DO_raster")),
                      column(12, 
                             verbatimTextOutput('maptext'))
                      

@@ -29,6 +29,7 @@ library(maptools)
 library(metricsgraphics)
 library(htmltools)
 
+
 load('appData.RData')
 
 
@@ -129,5 +130,28 @@ shinyServer(function(input, output) {
     
     
   })
+  
+  
+  
+  
+  
+  output$DO_raster <- renderPlot({
+    dyData() %>% 
+        # gather(depth, DO, -dateTime) %>% 
+        # separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+        # mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+        ggplot(aes(y = Date, x = Time, fill = `DO 0.5m`)) +
+        # ggtitle(station) +
+        geom_raster() +
+        scale_fill_gradient(low = 'red', high = 'green') +
+        scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+     })
+  
+  
+  
+  
+  
+  
+  
   
 })

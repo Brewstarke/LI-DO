@@ -60,3 +60,24 @@ rankDOdata
 # 
 # 
 # 
+
+# RasterPlots ----
+
+DO_Raster <- function(data, station){
+  library(lubridate)
+  library(scales)
+  data %>% 
+    select(dateTime, DO_0.5m) %>% 
+    gather(depth, DO, -dateTime) %>% 
+    separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+    mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+             ggplot(aes(y = Date, x = Time, fill = DO)) +
+             ggtitle(station) +
+             geom_raster() +
+             scale_fill_gradient(low = 'red', high = 'green') +
+             scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+}
+
+DO_Raster(DOdata, "NORTHPORT HARBOR AS NORTHPORT NY")
+
+
