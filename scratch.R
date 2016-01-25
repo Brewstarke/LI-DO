@@ -1,6 +1,5 @@
 library(devtools)
-install_github('rCharts', 'ramnathv')
-library(rCharts)
+library("d3heatmap", lib.loc="~/R/win-library/3.1")
 
 cleanDOdata <- alldata %>% 
 	select(-starts_with("Start")) %>% 
@@ -67,17 +66,48 @@ DO_Raster <- function(data, station){
   library(lubridate)
   library(scales)
   data %>% 
-    select(dateTime, DO_0.5m) %>% 
-    gather(depth, DO, -dateTime) %>% 
-    separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
-    mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
-             ggplot(aes(y = Date, x = Time, fill = DO)) +
-             ggtitle(station) +
-             geom_raster() +
-             scale_fill_gradient(low = 'red', high = 'green') +
-             scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+	filter(station_nm == station) %>%
+	select(dateTime, DO_0.5m) %>% 
+	gather(depth, DO, -dateTime) %>% 
+	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+	ggplot(aes(y = Date, x = Time, fill = DO)) +
+	ggtitle(station) +
+	geom_raster(hjust = 0, vjust = 0) +
+	scale_fill_gradient(low = 'red', high = 'green') +
+	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
 }
 
-DO_Raster(DOdata, "NORTHPORT HARBOR AS NORTHPORT NY")
+DO_Raster(DOdata, 'NORTHPORT HARBOR AT NORTHPORT NY')
+DO_Raster(DOdata, "HUNTINGTON HARBOR AT HUNTINGTON NY")
+
+d3heatmap(DOdata, scales = 'column', colors = 'X_00300_00011')
+
+# ggplot Raster plot
 
 
+
+DOdata %>% 
+	filter(station_nm == 'NORTHPORT HARBOR AT NORTHPORT NY') %>%
+	select(dateTime, DO_0.5m) %>% 
+	gather(depth, DO, -dateTime) %>% 
+	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+	ggplot(aes(y = Date, x = Time, fill = DO)) +
+	# ggtitle(station) +
+	geom_raster(hjust = 0, vjust = 0) +
+	scale_fill_gradient(low = 'red', high = 'green') +
+	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+
+a <- DOdata %>% 
+	filter(station_nm == 'NORTHPORT HARBOR AT NORTHPORT NY') %>%
+	select(dateTime, DO_0.5m) %>% 
+	gather(depth, DO, -dateTime) %>% 
+	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT'),
+	       Date = as.Date(Date))
+a %>% ggplot(aes(y = Date, x = Time, fill = DO)) +
+	# ggtitle(station) +
+	geom_raster(hjust = 0, vjust = 0) +
+	scale_fill_gradient(low = 'red', high = 'green') +
+	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
