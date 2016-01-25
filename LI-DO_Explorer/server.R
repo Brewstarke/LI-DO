@@ -34,34 +34,34 @@ load('appData.RData')
 
 
 # Globals - pre-load data from USGS site ----
-# 
-# siteIDs <- c('405004073391001', 
-#              '405240073314901', 
-#              '405232073281801', 
-#              '405318073250101', 
-#              '405329073212601', 
-#              '403739073401001', 
-#              '403731073353801', 
-#              '403734073153401', 
-#              '404513072555701', 
-#              '404338073082101', 
-#              '404327073072701', 
-#              '404149073051301', 
+
+# siteIDs <- c('405004073391001',
+#              '405240073314901',
+#              '405232073281801',
+#              '405318073250101',
+#              '405329073212601',
+#              '403739073401001',
+#              '403731073353801',
+#              '403734073153401',
+#              '404513072555701',
+#              '404338073082101',
+#              '404327073072701',
+#              '404149073051301',
 #              '404153073030701')
 # 
 # 
-# siteNames <- c('Hemp', 
-#                'OBH', 
-#                'CSH', 
-#                'Hunt', 
-#                'NPH', 
-#                'HB', 
-#                'MB', 
-#                'FI', 
-#                'BP', 
-#                'NCB', 
-#                'GSB1', 
-#                'GSB2', 
+# siteNames <- c('Hemp',
+#                'OBH',
+#                'CSH',
+#                'Hunt',
+#                'NPH',
+#                'HB',
+#                'MB',
+#                'FI',
+#                'BP',
+#                'NCB',
+#                'GSB1',
+#                'GSB2',
 #                'GSB3')
 # 
 # names(siteIDs) <- siteNames
@@ -72,17 +72,17 @@ load('appData.RData')
 # 
 # DOdata <- readNWISuv(siteIDs, DOparameter, "", "")
 # 
-# siteInfo <- attr(DO, "siteInfo")
+# siteInfo <- attr(DOdata, "siteInfo")
 # 
-# siteLocations <- siteInfo %>% 
-#   select(station_nm, site_no, starts_with("dec")) %>% 
-#   rename(Lat = dec_lat_va, Lon = dec_lon_va)
+# siteLocations <- siteInfo %>%
+#   select(station_nm, site_no, starts_with("dec")) %>%
+#   rename(Latitude = dec_lat_va, Longitude = dec_lon_va)
 # 
 # DOdata %>% left_join(siteLocations, by = 'site_no') -> DOdata
-
-DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011)) %>% 
-	select(dateTime, station_nm, DO_0.5m, Lat, Lon)
-
+# 
+# DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011)) %>% 
+# 	select(dateTime, station_nm, DO_0.5m, Latitude, Longitude)
+# 
 
 bluepoints <- readOGR(".","BluepointsProperty", encoding = "ESRI Shapefile")
 
@@ -105,7 +105,7 @@ shinyServer(function(input, output) {
 # dyGraph data munge
     
     
-  dyData <- reactive({
+  mappedData <- reactive({
     DOdata %>% 
   	filter(station_nm == input$siteMap_marker_click) %>%
 	rename('DO 0.5m' = DO_0.5m) %>%
@@ -113,14 +113,14 @@ shinyServer(function(input, output) {
   })
   
 # Testing marker click output----
-  output$maptext <- renderText(input$siteMap_marker_click$id)
+  output$maptext <- renderText(length(mappedData()$dateTime))
   
 # Dyplot Time Series Plot Function ----
   output$tsPlots <- renderDygraph({
     if(is.null(input$siteMap_marker_click))
       return(NULL)
     
-    dyData() %>%
+  mappedData() %>%
     	select(dateTime, `DO 0.5m`) %>% 
 	xts(order.by = .$dateTime) %>% 
 	dygraph(., main = input$siteMap_marker_click$id) %>%
@@ -131,31 +131,24 @@ shinyServer(function(input, output) {
 	dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>% 
 	dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
 
-    
   })
   
   
  # Raster Plot ---- 
   output$DO_raster <- renderPlot({
-	  dyData() %>% 
+  	if(is.null(input$siteMap_marker_click))
+  		return(NULL)
+  	mappedData() %>% 
 	  	select(dateTime, `DO 0.5m`) %>% 
 	  	gather(depth, DO, -dateTime) %>% 
 	  	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
 	  	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
 		  	ggplot(aes(y = Date, x = Time, fill = DO)) +
 		  	ggtitle(input$siteMap_marker_click$id) +
-		  	geom_raster(hjust = 0, vjust = 0) +
+		  	geom_raster(interpolate = TRUE, hjust = 0, vjust = 0) +
 		  	scale_fill_gradient(low = 'red', high = 'green') +
-		  	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))+ 
+		  	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"), expand = c(0, 0))+ 
   			theme_bw()
 	})
-  
-  
-  
-  
-  
-  
-  
-  
   
 })
