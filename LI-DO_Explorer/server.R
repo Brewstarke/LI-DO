@@ -28,7 +28,7 @@ library(sp)
 library(maptools)
 library(metricsgraphics)
 library(htmltools)
-
+library(scales)
 
 load('appData.RData')
 
@@ -80,7 +80,8 @@ load('appData.RData')
 # 
 # DOdata %>% left_join(siteLocations, by = 'site_no') -> DOdata
 
-DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011))
+DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011)) %>% 
+	select(dateTime, station_nm, DO_0.5m, Lat, Lon)
 
 
 bluepoints <- readOGR(".","BluepointsProperty", encoding = "ESRI Shapefile")
@@ -105,47 +106,50 @@ shinyServer(function(input, output) {
     
     
   dyData <- reactive({
-    DOdata %>% filter(station_nm == input$siteMap_marker_click) %>%
-      rename('DO 0.5m' = DO_0.5m) %>%
-      select(dateTime, starts_with("DO"))  
+    DOdata %>% 
+  	filter(station_nm == input$siteMap_marker_click) %>%
+	rename('DO 0.5m' = DO_0.5m) %>%
+      	select(dateTime, starts_with("DO"), station_nm)  
   })
   
 # Testing marker click output----
   output$maptext <- renderText(input$siteMap_marker_click$id)
   
-# Plot Function ----
+# Dyplot Time Series Plot Function ----
   output$tsPlots <- renderDygraph({
     if(is.null(input$siteMap_marker_click))
       return(NULL)
     
     dyData() %>%
-      xts(order.by = .$dateTime) %>% 
-      dygraph(., main = input$siteMap_marker_click$id) %>%
-      dyAxis("y", valueRange = c(-1, 11)) %>%
-      dySeries('DO 0.5m', 'DO 0.5m') %>%
-      dyRangeSelector(retainDateWindow = FALSE) %>%
-      dyOptions(useDataTimezone = FALSE) %>% 
-      dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>% 
-      dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
-    
+    	select(dateTime, `DO 0.5m`) %>% 
+	xts(order.by = .$dateTime) %>% 
+	dygraph(., main = input$siteMap_marker_click$id) %>%
+	dyAxis("y", valueRange = c(-1, 11)) %>%
+	dySeries() %>%
+	dyRangeSelector(retainDateWindow = FALSE) %>%
+	dyOptions(useDataTimezone = FALSE) %>% 
+	dyShading(from = 2.3, to = -1, axis = "y", color = "#ffd1d1") %>% 
+	dyShading(from = 2.3, to = 4.8, axis = 'y', color = "#ffe8d1")
+
     
   })
   
   
-  
-  
-  
+ # Raster Plot ---- 
   output$DO_raster <- renderPlot({
-    dyData() %>% 
-        # gather(depth, DO, -dateTime) %>% 
-        # separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
-        # mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
-        ggplot(aes(y = Date, x = Time, fill = `DO 0.5m`)) +
-        # ggtitle(station) +
-        geom_raster() +
-        scale_fill_gradient(low = 'red', high = 'green') +
-        scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
-     })
+	  dyData() %>% 
+	  	select(dateTime, `DO 0.5m`) %>% 
+	  	gather(depth, DO, -dateTime) %>% 
+	  	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	  	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+		  	ggplot(aes(y = Date, x = Time, fill = DO)) +
+		  	ggtitle(input$siteMap_marker_click$id) +
+		  	geom_raster(hjust = 0, vjust = 0) +
+		  	scale_fill_gradient(low = 'red', high = 'green') +
+		  	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))+ 
+  			theme_bw()
+	})
+  
   
   
   
