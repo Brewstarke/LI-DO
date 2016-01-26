@@ -67,9 +67,9 @@ DO_Raster <- function(data, station){
   library(scales)
   data %>% 
 	filter(station_nm == station) %>%
-	select(dateTime, DO_0.5m) %>% 
-	gather(depth, DO, -dateTime) %>% 
-	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	select(dateTimeLocal, DO_0.5m) %>% 
+	gather(depth, DO, -dateTimeLocal) %>% 
+	separate(dateTimeLocal, into = c("Date", "Time"), sep = " ") %>% 
 	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
 	ggplot(aes(y = Date, x = Time, fill = DO)) +
 	ggtitle(station) +
@@ -84,11 +84,24 @@ DO_Raster(DOdata, "HUNTINGTON HARBOR AT HUNTINGTON NY")
 d3heatmap(DOdata, scales = 'column', colors = 'X_00300_00011')
 
 # ggplot Raster plot
-
-
-
+# "MIDDLE BAY AT BALDWIN NY"                    
+# "FIRE ISLAND INLET AT BABYLON NY"             
+# "HEWLETT BAY AT EAST ROCKAWAY NY"             
+# "GREAT SOUTH BAY 2 of 3 NEAR WEST SAYVILLE NY"
+# "GREAT SOUTH BAY 3 of 3 NEAR SAYVILLE NY"     
+# "GREAT SOUTH BAY 1 of 3 NEAR GREAT RIVER NY"  
+# "NICOLL BAY AT OAKDALE NY"                    
+# "BELLPORT BAY AT BELLPORT NY"                 
+# "HEMPSTEAD HARBOR AT SEA CLIFF NY"            
+#  "COLD SPRING HARBOR AT COLD SPRING HARBOR NY" 
+#  "OYSTER BAY HARBOR AT OYSTER BAY NY"          
+#  "HUNTINGTON HARBOR AT HUNTINGTON NY"          
+#  "NORTHPORT HARBOR AT NORTHPORT NY"  
+# 
 DOdata %>% 
-	filter(station_nm == 'NORTHPORT HARBOR AT NORTHPORT NY') %>%
+  filter(station_nm == "BELLPORT BAY AT BELLPORT NY") %>%
+  # rename('DO 0.5m' = DO_0.5m) %>%
+  select(dateTime, starts_with("DO"), station_nm)   %>% 
 	select(dateTime, DO_0.5m) %>% 
 	gather(depth, DO, -dateTime) %>% 
 	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
@@ -99,15 +112,16 @@ DOdata %>%
 	scale_fill_gradient(low = 'red', high = 'green') +
 	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
 
-a <- DOdata %>% 
-	filter(station_nm == 'NORTHPORT HARBOR AT NORTHPORT NY') %>%
-	select(dateTime, DO_0.5m) %>% 
-	gather(depth, DO, -dateTime) %>% 
-	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
-	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT'),
-	       Date = as.Date(Date))
-a %>% ggplot(aes(y = Date, x = Time, fill = DO)) +
-	# ggtitle(station) +
-	geom_raster(hjust = 0, vjust = 0) +
-	scale_fill_gradient(low = 'red', high = 'green') +
-	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+
+  mappedData() %>% 
+    select(dateTime, `DO 0.5m`) %>% 
+    gather(depth, DO, -dateTime) %>% 
+    separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+    mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+    ggplot(aes(y = Date, x = Time, fill = DO)) +
+    ggtitle(input$siteMap_marker_click$id) +
+    geom_raster(interpolate = TRUE, hjust = 0, vjust = 0) +
+    scale_fill_gradient(low = 'red', high = 'green') +
+    scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"), expand = c(0, 0))+ 
+    theme_bw()
+})

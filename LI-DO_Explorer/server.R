@@ -80,9 +80,12 @@ load('appData.RData')
 # 
 # DOdata %>% left_join(siteLocations, by = 'site_no') -> DOdata
 # 
-# DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011)) %>% 
-# 	select(dateTime, station_nm, DO_0.5m, Latitude, Longitude)
 # 
+# DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011)) %>%
+# 	select(dateTime, station_nm, DO_0.5m, Latitude, Longitude) %>%
+#   rename(dateTimeGMT = dateTime) %>%
+#   mutate(dateTime = as.POSIXct(format(.$dateTimeGMT, tz = "EST")))
+
 
 bluepoints <- readOGR(".","BluepointsProperty", encoding = "ESRI Shapefile")
 
