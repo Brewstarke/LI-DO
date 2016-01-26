@@ -105,7 +105,8 @@ DOdata %>%
 	select(dateTime, DO_0.5m) %>% 
 	gather(depth, DO, -dateTime) %>% 
 	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
-	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) 
+%>%
 	ggplot(aes(y = Date, x = Time, fill = DO)) +
 	# ggtitle(station) +
 	geom_raster(hjust = 0, vjust = 0) +
@@ -125,3 +126,50 @@ DOdata %>%
     scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"), expand = c(0, 0))+ 
     theme_bw()
 })
+
+
+a <- DOdata %>% 
+	select(dateTime,station_nm, DO_0.5m) 
+%>% 
+	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT'))
+
+
+a %>% group_by(station_nm) %>% tally()
+
+
+c <- DOdata %>% 
+	filter(station_nm == "GREAT SOUTH BAY 2 of 3 NEAR WEST SAYVILLE NY") %>%
+	# rename('DO 0.5m' = DO_0.5m) %>%
+	# select(dateTime, starts_with("DO"), station_nm)   %>% 
+	select(dateTime, DO_0.5m) %>% 
+	gather(depth, DO, -dateTime) %>% 
+	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) 
+c %>% 	ggplot(aes(y = Date, x = Time, fill = DO)) +
+	# ggtitle(station) +
+	geom_raster(hjust = 0, vjust = 0) +
+	scale_fill_gradient(low = 'red', high = 'green') +
+	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+
+
+
+d <- DOdata %>% 
+	filter(station_nm == "BELLPORT BAY AT BELLPORT NY") %>%
+	# rename('DO 0.5m' = DO_0.5m) %>%
+	# select(dateTime, starts_with("DO"), station_nm)   %>% 
+	select(dateTime, DO_0.5m) %>% 
+	gather(depth, DO, -dateTime) %>% 
+	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
+	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) 
+
+d %>% 
+	ggplot(aes(y = Date, x = Time, fill = DO)) +
+	# ggtitle(station) +
+	geom_raster(hjust = 0, vjust = 0) +
+	scale_fill_gradient(low = 'red', high = 'green') +
+	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"))
+
+
+
+
