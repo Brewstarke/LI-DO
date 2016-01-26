@@ -149,7 +149,7 @@ shinyServer(function(input, output) {
 		  	ggplot(aes(y = Date, x = Time, fill = DO)) +
 		  	ggtitle(input$siteMap_marker_click$id) +
 		  	geom_raster(interpolate = TRUE, hjust = 0, vjust = 0) +
-		  	scale_fill_gradient(low = 'red', high = 'green') +
+		  	scale_fill_gradient(low = 'red', high = 'green', limits = c(0,11)) +
 		  	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"), expand = c(0, 0))+ 
   			theme_bw()
 	})
