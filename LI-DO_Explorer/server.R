@@ -110,9 +110,10 @@ shinyServer(function(input, output) {
     
   mappedData <- reactive({
     DOdata %>% 
-  	filter(station_nm == input$siteMap_marker_click) %>%
+  	filter(station_nm == input$siteMap_marker_click[1]) %>%
 	rename('DO 0.5m' = DO_0.5m) %>%
-      	select(dateTime, starts_with("DO"), station_nm)  
+  	distinct(.) %>%
+      	select(dateTime, starts_with("DO")) 
   })
   
 # Testing marker click output----
@@ -124,7 +125,7 @@ shinyServer(function(input, output) {
       return(NULL)
     
   mappedData() %>%
-    	select(dateTime, `DO 0.5m`) %>% 
+  	select(dateTime, `DO 0.5m`) %>%
 	xts(order.by = .$dateTime) %>% 
 	dygraph(., main = input$siteMap_marker_click$id) %>%
 	dyAxis("y", valueRange = c(-1, 11)) %>%
