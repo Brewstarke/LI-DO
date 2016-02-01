@@ -8,15 +8,14 @@
 #
 
 # Packages ----
+library(jsonlite)
 library(shiny)
-library(shinydashboard)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggthemes)
 library(lubridate)
 library(shiny)
-library(ggvis)
 library(dygraphs)
 library(xts)
 library(magrittr)
@@ -26,15 +25,15 @@ library(RColorBrewer)
 library(rgdal)
 library(sp)
 library(maptools)
-library(metricsgraphics)
+library(rgeos)
 library(htmltools)
 library(scales)
 
 load('appData.RData')
 
 
-# Globals - pre-load data from USGS site ----
-
+# # Globals - pre-load data from USGS site ----
+# 
 # siteIDs <- c('405004073391001',
 #              '405240073314901',
 #              '405232073281801',
@@ -49,26 +48,7 @@ load('appData.RData')
 #              '404149073051301',
 #              '404153073030701')
 # 
-# 
-# siteNames <- c('Hemp',
-#                'OBH',
-#                'CSH',
-#                'Hunt',
-#                'NPH',
-#                'HB',
-#                'MB',
-#                'FI',
-#                'BP',
-#                'NCB',
-#                'GSB1',
-#                'GSB2',
-#                'GSB3')
-# 
-# names(siteIDs) <- siteNames
-# 
-# 
 # DOparameter <- "00300"
-# 
 # 
 # DOdata <- readNWISuv(siteIDs, DOparameter, "", "")
 # 
@@ -76,20 +56,22 @@ load('appData.RData')
 # 
 # siteLocations <- siteInfo %>%
 #   select(station_nm, site_no, starts_with("dec")) %>%
-#   rename(Latitude = dec_lat_va, Longitude = dec_lon_va)
+#   rename(latitude = dec_lat_va, longitude = dec_lon_va)
 # 
 # DOdata %>% left_join(siteLocations, by = 'site_no') -> DOdata
 # 
 # 
 # DOdata %<>% mutate(DO_0.5m = ifelse(is.na(X_00300_00011), X_0.5m.above.seabed_00300_00011, X_00300_00011)) %>%
-# 	select(dateTime, station_nm, DO_0.5m, Latitude, Longitude) %>%
+# 	select(dateTime, station_nm, DO_0.5m, latitude, longitude) %>%
 #   rename(dateTimeGMT = dateTime) %>%
-#   mutate(dateTime = as.POSIXct(format(.$dateTimeGMT, tz = "EST")))
+#   mutate(dateTime = as.POSIXct(format(.$dateTimeGMT, tz = "EST"), tz = "EST"))
+# 
+# 
 
-
-bluepoints <- readOGR(".","BluepointsProperty", encoding = "ESRI Shapefile")
-
-bluepoints <- spTransform(bluepoints, CRS("+init=epsg:4326"))
+#
+# bluepoints <- readOGR(".","BluepointsProperty", encoding = "ESRI Shapefile")
+# 
+# bluepoints <- spTransform(bluepoints, CRS("+init=epsg:4326"))
 
 
 # Define server ----
@@ -99,8 +81,8 @@ shinyServer(function(input, output) {
 # Leaflet Map ----
     DO_map <- leaflet(siteLocations) %>% 
       addProviderTiles("CartoDB.Positron") %>%
-      addMarkers(layerId = ~station_nm, popup = ~htmlEscape(station_nm), options = popupOptions(zoomAnimation = TRUE, closeOnClick = FALSE)) %>% 
-      addPolygons(data = bluepoints, fill = FALSE, weight = 3) 
+      addMarkers(layerId = ~station_nm, popup = ~htmlEscape(station_nm), options = popupOptions(zoomAnimation = TRUE, closeOnClick = FALSE))  
+      # addPolygons(data = bluepoints, fill = FALSE, weight = 3) 
     DO_map
     
   })
@@ -146,11 +128,11 @@ shinyServer(function(input, output) {
 	  	select(dateTime, `DO 0.5m`) %>% 
 	  	gather(depth, DO, -dateTime) %>% 
 	  	separate(dateTime, into = c("Date", "Time"), sep = " ") %>% 
-	  	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'GMT')) %>%
+	  	mutate(Time = as.POSIXct(.$Time, format = "%H:%M:%S", tz = 'EST5EDT')) %>%
 		  	ggplot(aes(y = Date, x = Time, fill = DO)) +
 		  	ggtitle(input$siteMap_marker_click$id) +
 		  	geom_raster(interpolate = TRUE, hjust = 0, vjust = 0) +
-		  	scale_fill_gradient(low = 'red', high = 'green', limits = c(0,11)) +
+		  	scale_fill_gradientn(colors = rev(colorRamps::matlab.like2(12)), limits = c(0,12)) +
 		  	scale_x_datetime(breaks = date_breaks('1 hour'), labels = date_format("%H"), expand = c(0, 0))+ 
   			theme_bw()
 	})

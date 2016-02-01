@@ -7,15 +7,14 @@
 #    http://shiny.rstudio.com/
 #
 
+library(jsonlite)
 library(shiny)
-library(shinydashboard)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggthemes)
 library(lubridate)
 library(shiny)
-library(ggvis)
 library(dygraphs)
 library(xts)
 library(magrittr)
@@ -25,7 +24,6 @@ library(RColorBrewer)
 library(rgdal)
 library(sp)
 library(maptools)
-library(metricsgraphics)
 library(htmltools)
 
 
@@ -35,6 +33,9 @@ shinyUI(navbarPage("Long Island DO Monitoring", theme = "www/bootstrap.css",
                     fluidPage(
                     	fluidRow(
                 	  column(12,
+                	         tags$h5("Data presented within this explorer have been made available through the", 
+                	         	a(href = 'http://waterdata.usgs.gov/nwis', "USGS NWIS Web Interface:")
+                	         ),
                                 leafletOutput("siteMap"))
 	                    ),
 	                   fluidRow(
@@ -45,11 +46,6 @@ shinyUI(navbarPage("Long Island DO Monitoring", theme = "www/bootstrap.css",
 	                     column(6,
 	                            h4("Raster Plot"),
 	                            plotOutput("DO_raster"))
-	                     ),
-	                     fluidRow(
-	                     column(12, 
-	                            verbatimTextOutput('maptext')
-	                            )
 	                     )
                      
                 	   )
