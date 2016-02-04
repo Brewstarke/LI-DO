@@ -12,3 +12,4 @@ DO_Monitoring_report.Rmd
 LI-DO.Rproj
 Data_PullsFromUSGS.R
 rsconnect/
+appData.RData
