@@ -47,7 +47,7 @@ shinyUI(navbarPage("Long Island DO Monitoring", theme = "www/bootstrap.css",
 	                            h4("Raster Plot"),
 	                            plotOutput("DO_raster")),
 	                     column(12, 
-	                            verbatimTextOutput('mappeddatatext'))
+	                            textOutput('mappeddatatext'))
 	                     )
                      
                 	   )

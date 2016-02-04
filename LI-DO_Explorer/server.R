@@ -53,6 +53,7 @@ DOparameter <- "00300"
  # DOdata <- readNWISuv(siteIDs, DOparameter, "", "", tz = "America/New_York")
 DOdata <- readNWISuv(siteIDs, DOparameter, "", "") # tz will be in UTC as per USGS standard- 
 # 
+queryTime <- attr(DOdata, "queryTime")
 
 siteInfo <- attr(DOdata, "siteInfo")
 
@@ -77,8 +78,7 @@ shinyServer(function(input, output) {
 # Leaflet Map ----
     DO_map <- leaflet(siteLocations) %>% 
       addProviderTiles("CartoDB.Positron") %>%
-      addMarkers(layerId = ~station_nm, popup = ~htmlEscape(station_nm), options = popupOptions(zoomAnimation = TRUE, closeOnClick = FALSE))  
-      # addPolygons(data = bluepoints, fill = FALSE, weight = 3) 
+      addMarkers(layerId = ~station_nm, popup = ~htmlEscape(station_nm), options = popupOptions(zoomAnimation = TRUE, closeOnClick = FALSE))
     DO_map
     
   })
@@ -95,7 +95,7 @@ shinyServer(function(input, output) {
   })
   
 # Testing marker click output----
-  output$mappeddatatext <- renderText(tz(mappedData()$dateTime))
+  output$mappeddatatext <- renderText(paste("Data retrieved ", as.character(queryTime), sep = ""))
   
 # Dyplot Time Series Plot Function ----
   output$tsPlots <- renderDygraph({
